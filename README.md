@@ -10,7 +10,7 @@ and build it yourself.
 ## The Fun Begins
 
 Below is a list of the currently implemented features for PKLite
-For more information on all features and for feature documentation, visit the website at [https://www.pklite.xyz](pklite.xyz).
+For more information on all features and for all questions and suggetions please join our friendly discord.
 
 - PvP Tools
 
