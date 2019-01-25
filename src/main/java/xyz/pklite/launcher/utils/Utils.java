@@ -57,10 +57,9 @@ public class Utils
 
 	/**
 	 * Loads a custom font from the data/font folder. Font must be either otf or
-	 * ttf.
-	 *
-	 * @param fontName
-	 * @param size
+	 * ttf.	 *
+	 * @param fontName the file name of the font to open
+	 * @param size the size you want the font to be
 	 */
 	public static void setFont(Component c, String fontName, float size)
 	{
@@ -80,9 +79,8 @@ public class Utils
 	}
 
 	/**
-	 * Opens the users browser and goes to the specified URL
-	 *
-	 * @param url
+	 * Opens the users browser and goes to the specified URL	 *
+	 * @param url the String of the web address
 	 */
 	public static void openWebpage(String url)
 	{
@@ -95,11 +93,16 @@ public class Utils
 			}
 			catch (Exception e)
 			{
-				// e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Error opening website " + url);
 			}
 		}
 	}
 
+	/**
+	 * Gets an imageicon based on the file name of the image file
+	 * @param name the name of the image file
+	 * @return the ImageIcon object
+	 */
 	public static ImageIcon getImage(String name)
 	{
 		return new ImageIcon(Utils.class.getResource("/img/" + name));

@@ -109,8 +109,6 @@ public class AppFrame extends JFrame
 	}
 
 	public static JLabel tooltip;
-	public static IconLabel serverTime;
-	public static IconLabel playerCount;
 
 	private void addLinks()
 	{
@@ -140,9 +138,6 @@ public class AppFrame extends JFrame
 		docsIconLabel.setBounds(415, 50, 64, 64);
 		add(docsIconLabel);
 
-		serverTime = new IconLabel("", 12);
-		serverTime.setBounds(15, appHeight - 60, 175, 18);
-		add(serverTime);
 	}
 
 	private void addNewsBox()

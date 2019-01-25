@@ -9,7 +9,6 @@
 
 package xyz.pklite.launcher;
 
-import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import java.awt.Color;
@@ -43,7 +42,7 @@ public class Launcher
 		if (!Settings.LAUNCHER_VERSION.equals(webVersion))
 		{
 			JOptionPane.showMessageDialog(null,"PKLite launcher is outdated. Download the" +
-				" newest version at pklite.xyz");
+				" newest from the releases page on our github at " + Settings.RELEASES_URL);
 			//System.exit(0);
 		}
 
