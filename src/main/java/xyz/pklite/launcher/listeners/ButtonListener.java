@@ -11,19 +11,20 @@ package xyz.pklite.launcher.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import xyz.pklite.launcher.Launcher;
 import xyz.pklite.launcher.Settings;
 import xyz.pklite.launcher.components.AppFrame;
-import xyz.pklite.launcher.net.Download;
+import xyz.pklite.launcher.net.NIODownload;
 import xyz.pklite.launcher.net.Update;
 import xyz.pklite.launcher.utils.Utils;
 
 public class ButtonListener implements ActionListener
 {
 
-	private static Download download;
 
 	@Override
 	public void actionPerformed(ActionEvent e)
@@ -43,6 +44,7 @@ public class ButtonListener implements ActionListener
 					AppFrame.pbar.setString("Checking for Client Updates...");
 
 					byte status = Update.updateExists();
+					System.out.println(status);
 					if (status == 0)
 					{
 						AppFrame.pbar.setString("Now Launching " + Settings.PROJECT_NAME + "!");
@@ -51,29 +53,19 @@ public class ButtonListener implements ActionListener
 					}
 					if (status == 1 || status == 3)
 					{
-						if (download == null)
+						try
 						{
-							download = new Download(Settings.DOWNLOAD_URL);
-							download.download();
+							NIODownload nioDownload = new NIODownload(Settings.DOWNLOAD_URL);
+							Future future = Executors.newSingleThreadExecutor().submit(nioDownload);
+							future.get();
+							AppFrame.pbar.setString("Update successful!");
+							Utils.launchClient();
 						}
-						else
+
+						catch (Exception e1)
 						{
-							switch (download.getStatus())
-							{
-								case Download.COMPLETE:
-									return;
-								case Download.DOWNLOADING:
-									download.pause();
-									break;
-								case Download.PAUSED:
-									download.resume();
-									break;
-								case Download.ERROR:
-									JOptionPane.showMessageDialog(Launcher.app,
-										"Eggs are not supposed to be green.",
-										"Inane error",
-										JOptionPane.ERROR_MESSAGE);
-							}
+							JOptionPane.showMessageDialog(null, e1.getMessage(),
+								"Error!", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				});

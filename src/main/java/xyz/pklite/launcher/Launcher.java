@@ -12,9 +12,12 @@ package xyz.pklite.launcher;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import java.awt.Color;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import xyz.pklite.launcher.components.AppFrame;
+import xyz.pklite.launcher.utils.LauncherUpdate;
 
 public class Launcher
 {
@@ -23,28 +26,18 @@ public class Launcher
 
 	public static void main(String[] main)
 	{
-		String webVersion = null;
-		try
-		{
-			webVersion = Unirest.get(Settings.VERSION_URL).asString().getBody();
-		}
-		catch (UnirestException e)
-		{
-			e.printStackTrace();
-		}
+
+
 		UIManager.put("Button.select", new Color(1.0f, 1.0f, 1.0f, 0.05f));
 		System.setProperty("awt.useSystemAAFontSettings", "on");
 		System.setProperty("swing.aatext", "true");
-
 		app = new AppFrame();
+
 		app.setVisible(true);
 		app.setLocationRelativeTo(null);
-		if (!Settings.LAUNCHER_VERSION.equals(webVersion))
-		{
-			JOptionPane.showMessageDialog(null,"PKLite launcher is outdated. Download the" +
-				" newest from the releases page on our github at " + Settings.RELEASES_URL);
-			//System.exit(0);
-		}
+		ExecutorService executorService = new ScheduledThreadPoolExecutor(1);
+		executorService.submit(new LauncherUpdate());
+
 
 	}
 }

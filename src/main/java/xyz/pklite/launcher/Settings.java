@@ -23,8 +23,8 @@ public class Settings
 	public static final String HOMEPAGE_URL = "pklite.xyz";
 	public static final String VERSION_URL = "https://www.pklite.xyz/releases/launcher";
 	public static final String RELEASES_URL = "https://github.com/pklite/PKLite-Launcher/releases";
-	public static final String LAUNCHER_VERSION = "1.0.1";
-	public static final int NEWS_LIMIT = 3;
+	public static final String LAUNCHER_VERSION = "1.0.2";
+	public static final int NEWS_LIMIT = 4;
 
 	public static final Dimension frameSize = new Dimension(600, 350);
 	public static final Color borderColor = new Color(0, 0, 0);

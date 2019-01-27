@@ -20,6 +20,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.time.Instant;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -42,6 +44,7 @@ public class AppFrame extends JFrame
 
 	public AppFrame()
 	{
+
 		setPreferredSize(Settings.frameSize);
 
 		appWidth = (int) getPreferredSize().getWidth();
@@ -54,7 +57,9 @@ public class AppFrame extends JFrame
 		getContentPane().setBackground(Settings.backgroundColor);
 
 		addMenuBar();
-		addNewsBox();
+		ExecutorService executor = Executors.newSingleThreadExecutor();
+		executor.submit(this::addNewsBox);
+
 		addLinks();
 		addHeader();
 		addPlayButton();
@@ -63,6 +68,7 @@ public class AppFrame extends JFrame
 		setIconImage(Utils.getImage("favicon_large.png").getImage());
 		addMouseListener();
 		pack();
+
 	}
 
 	public static JProgressBar pbar;
@@ -142,58 +148,61 @@ public class AppFrame extends JFrame
 
 	private void addNewsBox()
 	{
-		final int red = Settings.primaryColor.getRed();
-		final int green = Settings.primaryColor.getGreen();
-		final int blue = Settings.primaryColor.getBlue();
-
-		JLabel status1 = new JLabel(Settings.PROJECT_NAME + ": Open Source PvP Client");
-		status1.setForeground(Settings.primaryColor);
-		status1.setHorizontalAlignment(SwingConstants.CENTER);
-		status1.setBounds(0, 75, appWidth, 75);
-		Utils.setFont(status1, "OpenSans-Light.ttf", 28);
-		add(status1);
-		JLabel status2 = new JLabel("<html><h3>Latest news:</h3></html>");
-		status2.setForeground(Color.WHITE);
-		status2.setHorizontalAlignment(SwingConstants.CENTER);
-		status2.setBounds(0, 132, appWidth, 30);
-		Utils.setFont(status2, "OpenSans-Light.ttf", 16);
-		add(status2);
 
 
-		try
-		{
-			HttpResponse<JsonNode> newsFeedResponse = Unirest.get("https://www.pklite.xyz/wp-json/wp/v2/posts").asJson();
-			for (int i = 0; i < Settings.NEWS_LIMIT; i++)
+			final int red = Settings.primaryColor.getRed();
+			final int green = Settings.primaryColor.getGreen();
+			final int blue = Settings.primaryColor.getBlue();
+
+			JLabel status1 = new JLabel(Settings.PROJECT_NAME + ": Open Source PvP Client");
+			status1.setForeground(Settings.primaryColor);
+			status1.setHorizontalAlignment(SwingConstants.CENTER);
+			status1.setBounds(0, 75, appWidth, 75);
+			Utils.setFont(status1, "OpenSans-Light.ttf", 28);
+			add(status1);
+			JLabel status2 = new JLabel("<html><h3>Latest news:</h3></html>");
+			status2.setForeground(Color.WHITE);
+			status2.setHorizontalAlignment(SwingConstants.CENTER);
+			status2.setBounds(0, 132, appWidth, 30);
+			Utils.setFont(status2, "OpenSans-Light.ttf", 16);
+			add(status2);
+
+
+			try
 			{
-				JLabel newsLabel = new JLabel();
-				String newsEntry = "<html>";
-				String date = newsFeedResponse.getBody().getArray().getJSONObject(i).getString("date");
-				Date date1 = java.util.Date.from(Instant.parse(date + "Z"));
-				String link = newsFeedResponse.getBody().getArray().getJSONObject(i).getString("link");
-				String title = newsFeedResponse.getBody().getArray().getJSONObject(i).getJSONObject("title").getString("rendered");
-				String postDate = Utils.dateFormat.format(date1);
-				newsEntry += postDate + ": ";
-				newsEntry += title;
-				newsEntry += "</html>";
-				newsLabel.setText(newsEntry);
-				newsLabel.setForeground(Color.WHITE);
-				newsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-				newsLabel.setBounds(0, 160 + (30 * i), appWidth, 30);
-				newsLabel.addMouseListener(new NewsLinkListener(link, newsLabel));
-				Utils.setFont(newsLabel, "OpenSans-Light.ttf", 14);
-				add(newsLabel);
+				HttpResponse<JsonNode> newsFeedResponse = Unirest.get("https://www.pklite.xyz/wp-json/wp/v2/posts").asJson();
+				for (int i = 0; i < Settings.NEWS_LIMIT; i++)
+				{
+					JLabel newsLabel = new JLabel();
+					String newsEntry = "<html>";
+					String date = newsFeedResponse.getBody().getArray().getJSONObject(i).getString("date");
+					Date date1 = java.util.Date.from(Instant.parse(date + "Z"));
+					String link = newsFeedResponse.getBody().getArray().getJSONObject(i).getString("link");
+					String title = newsFeedResponse.getBody().getArray().getJSONObject(i).getJSONObject("title").getString("rendered");
+					String postDate = Utils.dateFormat.format(date1);
+					newsEntry += postDate + ": ";
+					newsEntry += title;
+					newsEntry += "</html>";
+					newsLabel.setText(newsEntry);
+					newsLabel.setForeground(Color.WHITE);
+					newsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+					newsLabel.setBounds(0, 160 + (30 * i), appWidth, 30);
+					newsLabel.addMouseListener(new NewsLinkListener(link, newsLabel));
+					Utils.setFont(newsLabel, "OpenSans-Light.ttf", 14);
+					add(newsLabel);
+					repaint();
+				}
 			}
-		}
-		catch (UnirestException e)
-		{
-			e.printStackTrace();
-			status2.setText("Error fetching news feed");
-			status2.repaint();
-		}
-		catch (JSONException e)
-		{
+			catch (UnirestException e)
+			{
+				e.printStackTrace();
+				status2.setText("Error fetching news feed");
+				status2.repaint();
+			}
+			catch (JSONException e)
+			{
 
-		}
+			}
 	}
 
 	private void addMenuBar()
