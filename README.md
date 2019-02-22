@@ -56,4 +56,7 @@ For more information on all features and for all questions and suggetions please
  - Freeze Timers
     
     - Timers that count when players are frozen
-    - Refreeze timers   
+    - Refreeze timers  
+    
+- Friend Tagging
+    - Add a tag to players on your friends list that shows up on their player indicator.
