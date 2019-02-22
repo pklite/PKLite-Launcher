@@ -52,3 +52,8 @@ For more information on all features and for all questions and suggetions please
     - Indicate PvP safezones
     - Indicate Deadman safezone
     - Show lines on minimap
+    
+ - Freeze Timers
+    
+    - Timers that count when players are frozen
+    - Refreeze timers   
