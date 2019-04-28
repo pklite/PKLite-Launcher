@@ -42,7 +42,15 @@ public class Utils
 		AppFrame.playButton.setEnabled(true);
 		try
 		{
-			ProcessBuilder pb = new ProcessBuilder("java", "-jar", Settings.SAVE_DIR + Settings.SAVE_NAME);
+			ProcessBuilder pb;
+			if (AppFrame.pmode.isSelected())
+			{
+				pb = new ProcessBuilder("java", "-jar", Settings.SAVE_DIR + Settings.SAVE_NAME, "--penguin");
+			}
+			else
+			{
+				pb = new ProcessBuilder("java", "-jar", Settings.SAVE_DIR + Settings.SAVE_NAME);
+			}
 			pb.directory(new File(System.getProperty("java.home") + File.separator + "bin"));
 			final Process proc = pb.start();
 			System.setOut(new PrintStream(proc.getOutputStream()));
@@ -62,8 +70,9 @@ public class Utils
 	/**
 	 * Loads a custom font from the data/font folder. Font must be either otf or
 	 * ttf.	 *
+	 *
 	 * @param fontName the file name of the font to open
-	 * @param size the size you want the font to be
+	 * @param size     the size you want the font to be
 	 */
 	public static void setFont(Component c, String fontName, float size)
 	{
@@ -84,6 +93,7 @@ public class Utils
 
 	/**
 	 * Opens the users browser and goes to the specified URL	 *
+	 *
 	 * @param url the String of the web address
 	 */
 	public static void openWebpage(String url)
@@ -104,6 +114,7 @@ public class Utils
 
 	/**
 	 * Gets an imageicon based on the file name of the image file
+	 *
 	 * @param name the name of the image file
 	 * @return the ImageIcon object
 	 */

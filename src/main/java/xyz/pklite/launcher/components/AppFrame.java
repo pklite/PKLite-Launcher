@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -64,6 +65,7 @@ public class AppFrame extends JFrame
 		addHeader();
 		addPlayButton();
 		addProgressBar();
+		addPenguinMode();
 
 		setIconImage(Utils.getImage("favicon_large.png").getImage());
 		addMouseListener();
@@ -72,6 +74,21 @@ public class AppFrame extends JFrame
 	}
 
 	public static JProgressBar pbar;
+	public static JCheckBox pmode;
+
+	private void addPenguinMode()
+	{
+		pmode = new JCheckBox();
+
+		pmode.setBorderPainted(false);
+		pmode.setBackground(Settings.backgroundColor.darker());
+		pmode.setForeground(new Color(25, 25, 25));
+		pmode.setToolTipText("Penguin Mode");
+		pmode.setBounds(2, 25, 20, 20);
+		pmode.setVisible(true);
+
+		add(pmode);
+	}
 
 	private void addProgressBar()
 	{
@@ -255,6 +272,9 @@ public class AppFrame extends JFrame
 					int X = thisX + xMoved;
 					int Y = thisY + yMoved;
 					setLocation(X, Y);
+					repaint();
+					revalidate();
+					repaint();
 				}
 			}
 		});
