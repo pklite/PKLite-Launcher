@@ -20,6 +20,7 @@ import xyz.pklite.launcher.Settings;
 import xyz.pklite.launcher.components.AppFrame;
 import xyz.pklite.launcher.net.NIODownload;
 import xyz.pklite.launcher.net.Update;
+import xyz.pklite.launcher.net.UpdateStatus;
 import xyz.pklite.launcher.utils.Utils;
 
 public class ButtonListener implements ActionListener
@@ -43,15 +44,16 @@ public class ButtonListener implements ActionListener
 					AppFrame.playButton.setEnabled(false);
 					AppFrame.pbar.setString("Checking for Client Updates...");
 
-					byte status = Update.updateExists();
-					System.out.println(status);
-					if (status == 0)
+					UpdateStatus updateStatus = Update.updateExists();
+					if (updateStatus.equals(UpdateStatus.UP_TO_DATE))
 					{
 						AppFrame.pbar.setString("Now Launching " + Settings.PROJECT_NAME + "!");
 						Utils.launchClient();
 						return;
 					}
-					if (status == 1 || status == 3)
+					if (updateStatus.equals(UpdateStatus.FIRST_DOWNLOAD) ||
+						updateStatus.equals(UpdateStatus.UPDATE_NEEDED))
+
 					{
 						try
 						{
@@ -68,6 +70,13 @@ public class ButtonListener implements ActionListener
 								"Error!", JOptionPane.ERROR_MESSAGE);
 						}
 					}
+					if (updateStatus.equals(UpdateStatus.REMOTE_ERROR))
+					{
+						JOptionPane.showMessageDialog(null, "There was an error contacting " +
+								"PKLite servers",
+							"Error!", JOptionPane.ERROR_MESSAGE);
+					}
+
 				});
 				playThread.start();
 				break;

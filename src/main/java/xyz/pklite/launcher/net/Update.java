@@ -9,34 +9,46 @@
 
 package xyz.pklite.launcher.net;
 
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import xyz.pklite.launcher.Settings;
 
 public class Update
 {
 
-	public static byte updateExists()
+	public static UpdateStatus updateExists()
 	{
 		File file = new File(Settings.SAVE_DIR + Settings.SAVE_NAME);
+		String localHash = null;
+		String remoteHash = null;
 		if (!file.exists())
 		{
-			return 1;
+			return UpdateStatus.FIRST_DOWNLOAD;
 		}
 
-		String localCheck = Checksum.getLocalChecksum();
-		String remoteCheck = Checksum.getRemoteChecksum();
-
-		if (remoteCheck == null || localCheck == null)
+		try (InputStream is = Files.newInputStream(file.toPath()))
 		{
-			return 2;
-		}
+			localHash = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
+			remoteHash = Unirest.get(Settings.HASH_URL).asString().getBody();
+			if (!localHash.equalsIgnoreCase(remoteHash))
+			{
+				return UpdateStatus.UPDATE_NEEDED;
+			}
 
-		if (!remoteCheck.equalsIgnoreCase(localCheck))
+		}
+		catch(IOException ioe)
 		{
-			return 3;
+			return UpdateStatus.FIRST_DOWNLOAD;
 		}
-
-		return 0;
+		catch(UnirestException unie)
+		{
+			return UpdateStatus.REMOTE_ERROR;
+		}
+		return UpdateStatus.UP_TO_DATE;
 	}
 
 }
