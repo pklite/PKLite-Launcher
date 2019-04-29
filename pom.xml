@@ -6,15 +6,15 @@
 
 	<groupId>xyz.pklite</groupId>
 	<artifactId>launcher</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>8</source>
-					<target>8</target>
+					<source>9</source>
+					<target>9</target>
 				</configuration>
 			</plugin>
 					<plugin>
@@ -23,7 +23,7 @@
 						<version>3.2.1</version>
 						<executions>
 							<execution>
-								<phase>package</phase>
+								<phase>install</phase>
 								<goals>
 									<goal>shade</goal>
 								</goals>
@@ -37,6 +37,50 @@
 							</execution>
 						</executions>
 					</plugin>
+			<plugin>
+				<groupId>com.akathist.maven.plugins.launch4j</groupId>
+				<artifactId>launch4j-maven-plugin</artifactId>
+				<version>1.5.2</version>
+				<executions>
+					<execution>
+						<id>l4j-gui</id>
+						<phase>package</phase>
+						<goals>
+							<goal>launch4j</goal>
+						</goals>
+						<configuration>
+							<headerType>gui</headerType>
+							<outfile>target/PKLite.exe</outfile>
+							<jar>target/${project.artifactId}-${project.version}-SHADED.jar</jar>
+							<!-- if <dontWrapJar>true</dontWrapJar> change to this conf <jar>${project.artifactId}-${project.version}.jar</jar> -->
+							<dontWrapJar>false</dontWrapJar>
+							<errTitle>Error in launch4j plugin</errTitle>
+							<classPath>
+								<mainClass>xyz.pklite.launcher.Launcher</mainClass>
+							</classPath>
+							<icon>icon.ico</icon>
+							<jre>
+								<minVersion>1.5.0</minVersion>
+								<maxVersion>1.9.0</maxVersion>
+								<initialHeapSize>512</initialHeapSize>
+								<maxHeapSize>1024</maxHeapSize>
+							</jre>
+							<versionInfo>
+								<fileVersion>1.0.0.0</fileVersion>
+								<txtFileVersion>1.0.0.0</txtFileVersion>
+								<fileDescription>PKLite Launcher</fileDescription>
+								<copyright>Copyright (c) 2019 </copyright>
+								<companyName>PKLite</companyName>
+								<productVersion>3.0.0.0</productVersion>
+								<txtProductVersion>${project.version}</txtProductVersion>
+								<productName>PKLite</productName>
+								<internalName>PKLite</internalName>
+								<originalFilename>PKLite.exe</originalFilename>
+							</versionInfo>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>

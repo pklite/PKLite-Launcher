@@ -15,6 +15,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Hex;
 import xyz.pklite.launcher.Settings;
 
 public class Update
@@ -31,20 +34,24 @@ public class Update
 		}
 		try (InputStream is = Files.newInputStream(file.toPath()))
 		{
-			localHash = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
-			remoteHash = Unirest.get(Settings.HASH_URL).asString().getBody();
+			localHash = org.apache.commons.codec.digest.DigestUtils.md5Hex(is.readAllBytes());
+			remoteHash = new String(Unirest.get(Settings.HASH_URL).asBinary().getRawBody().readAllBytes());
 			if (!localHash.equalsIgnoreCase(remoteHash))
 			{
+				System.out.println(remoteHash);
+				System.out.println(localHash);
+				System.out.println("update");
 				return UpdateStatus.UPDATE_NEEDED;
 			}
 		}
 		catch (IOException e)
 		{
+			e.printStackTrace();
 			return UpdateStatus.FIRST_DOWNLOAD;
 		}
 		catch (UnirestException e)
 		{
-			return UpdateStatus.REMOTE_ERROR;
+			e.printStackTrace();
 		}
 		return UpdateStatus.UP_TO_DATE;
 	}
