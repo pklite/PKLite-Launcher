@@ -9,34 +9,50 @@
 
 package xyz.pklite.launcher.net;
 
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Hex;
 import xyz.pklite.launcher.Settings;
 
 public class Update
 {
 
-	public static byte updateExists()
+	public static UpdateStatus updateExists()
 	{
 		File file = new File(Settings.SAVE_DIR + Settings.SAVE_NAME);
+		String localHash = null;
+		String remoteHash = null;
 		if (!file.exists())
 		{
-			return 1;
+			return UpdateStatus.FIRST_DOWNLOAD;
 		}
-
-		String localCheck = Checksum.getLocalChecksum();
-		String remoteCheck = Checksum.getRemoteChecksum();
-
-		if (remoteCheck == null || localCheck == null)
+		try (InputStream is = Files.newInputStream(file.toPath()))
 		{
-			return 2;
+			localHash = org.apache.commons.codec.digest.DigestUtils.md5Hex(is.readAllBytes());
+			remoteHash = new String(Unirest.get(Settings.HASH_URL).asBinary().getRawBody().readAllBytes());
+			if (!localHash.equalsIgnoreCase(remoteHash))
+			{
+				System.out.println(remoteHash);
+				System.out.println(localHash);
+				System.out.println("update");
+				return UpdateStatus.UPDATE_NEEDED;
+			}
 		}
-
-		if (!remoteCheck.equalsIgnoreCase(localCheck))
+		catch (IOException e)
 		{
-			return 3;
+			e.printStackTrace();
+			return UpdateStatus.FIRST_DOWNLOAD;
 		}
-
-		return 0;
+		catch (UnirestException e)
+		{
+			e.printStackTrace();
+		}
+		return UpdateStatus.UP_TO_DATE;
 	}
-
 }

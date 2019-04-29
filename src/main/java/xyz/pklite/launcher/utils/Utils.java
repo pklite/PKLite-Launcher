@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import xyz.pklite.launcher.HardwareAccelerationMode;
 import xyz.pklite.launcher.Settings;
 import xyz.pklite.launcher.components.AppFrame;
 
@@ -42,7 +43,8 @@ public class Utils
 		AppFrame.playButton.setEnabled(true);
 		try
 		{
-			ProcessBuilder pb = new ProcessBuilder("java", "-jar", Settings.SAVE_DIR + Settings.SAVE_NAME);
+			HardwareAccelerationMode selectedMode = (HardwareAccelerationMode) AppFrame.hardwareAccelerationComboBox.getSelectedItem();
+			ProcessBuilder pb = new ProcessBuilder(selectedMode.toParams());
 			pb.directory(new File(System.getProperty("java.home") + File.separator + "bin"));
 			final Process proc = pb.start();
 			System.setOut(new PrintStream(proc.getOutputStream()));
