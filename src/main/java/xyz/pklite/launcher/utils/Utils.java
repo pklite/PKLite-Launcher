@@ -20,11 +20,13 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import xyz.pklite.launcher.HardwareAccelerationMode;
 import xyz.pklite.launcher.Settings;
 import xyz.pklite.launcher.components.AppFrame;
 
@@ -42,15 +44,13 @@ public class Utils
 		AppFrame.playButton.setEnabled(true);
 		try
 		{
-			ProcessBuilder pb;
-			if (AppFrame.pmode.isSelected())
+			HardwareAccelerationMode selectedMode = (HardwareAccelerationMode) AppFrame.hardwareAccelerationComboBox.getSelectedItem();
+			List<String> params = selectedMode.toParams();
+			if(AppFrame.pmode.isSelected())
 			{
-				pb = new ProcessBuilder("java", "-jar", Settings.SAVE_DIR + Settings.SAVE_NAME, "--penguin");
+				params.add("--penguin");
 			}
-			else
-			{
-				pb = new ProcessBuilder("java", "-jar", Settings.SAVE_DIR + Settings.SAVE_NAME);
-			}
+			ProcessBuilder pb = new ProcessBuilder(params);
 			pb.directory(new File(System.getProperty("java.home") + File.separator + "bin"));
 			final Process proc = pb.start();
 			System.setOut(new PrintStream(proc.getOutputStream()));
