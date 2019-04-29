@@ -20,6 +20,7 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -44,7 +45,12 @@ public class Utils
 		try
 		{
 			HardwareAccelerationMode selectedMode = (HardwareAccelerationMode) AppFrame.hardwareAccelerationComboBox.getSelectedItem();
-			ProcessBuilder pb = new ProcessBuilder(selectedMode.toParams());
+			List<String> params = selectedMode.toParams();
+			if(AppFrame.pmode.isSelected())
+			{
+				params.add("--penguin");
+			}
+			ProcessBuilder pb = new ProcessBuilder(params);
 			pb.directory(new File(System.getProperty("java.home") + File.separator + "bin"));
 			final Process proc = pb.start();
 			System.setOut(new PrintStream(proc.getOutputStream()));
@@ -64,8 +70,9 @@ public class Utils
 	/**
 	 * Loads a custom font from the data/font folder. Font must be either otf or
 	 * ttf.	 *
+	 *
 	 * @param fontName the file name of the font to open
-	 * @param size the size you want the font to be
+	 * @param size     the size you want the font to be
 	 */
 	public static void setFont(Component c, String fontName, float size)
 	{
@@ -86,6 +93,7 @@ public class Utils
 
 	/**
 	 * Opens the users browser and goes to the specified URL	 *
+	 *
 	 * @param url the String of the web address
 	 */
 	public static void openWebpage(String url)
@@ -106,6 +114,7 @@ public class Utils
 
 	/**
 	 * Gets an imageicon based on the file name of the image file
+	 *
 	 * @param name the name of the image file
 	 * @return the ImageIcon object
 	 */

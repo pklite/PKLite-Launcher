@@ -32,27 +32,26 @@ public class Update
 		{
 			return UpdateStatus.FIRST_DOWNLOAD;
 		}
+
 		try (InputStream is = Files.newInputStream(file.toPath()))
 		{
-			localHash = org.apache.commons.codec.digest.DigestUtils.md5Hex(is.readAllBytes());
-			remoteHash = new String(Unirest.get(Settings.HASH_URL).asBinary().getRawBody().readAllBytes());
+			localHash = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
+			remoteHash = Unirest.get(Settings.HASH_URL).asString().getBody();
 			if (!localHash.equalsIgnoreCase(remoteHash))
 			{
-				System.out.println(remoteHash);
-				System.out.println(localHash);
-				System.out.println("update");
 				return UpdateStatus.UPDATE_NEEDED;
 			}
+
 		}
-		catch (IOException e)
+		catch(IOException ioe)
 		{
-			e.printStackTrace();
 			return UpdateStatus.FIRST_DOWNLOAD;
 		}
-		catch (UnirestException e)
+		catch(UnirestException unie)
 		{
-			e.printStackTrace();
+			return UpdateStatus.REMOTE_ERROR;
 		}
 		return UpdateStatus.UP_TO_DATE;
 	}
+
 }

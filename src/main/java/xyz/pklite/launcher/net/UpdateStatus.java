@@ -1,3 +1,4 @@
+
 package xyz.pklite.launcher.net;
 
 public enum UpdateStatus
