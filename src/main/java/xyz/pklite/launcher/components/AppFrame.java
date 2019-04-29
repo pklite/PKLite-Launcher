@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
@@ -30,8 +31,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 import org.json.JSONException;
+import xyz.pklite.launcher.HardwareAccelerationMode;
 import xyz.pklite.launcher.Settings;
 import xyz.pklite.launcher.listeners.ButtonListener;
+import xyz.pklite.launcher.listeners.DropDownListener;
 import xyz.pklite.launcher.listeners.NewsLinkListener;
 import xyz.pklite.launcher.utils.Utils;
 
@@ -63,6 +66,7 @@ public class AppFrame extends JFrame
 		addLinks();
 		addHeader();
 		addPlayButton();
+		addHardwareCombo();
 		addProgressBar();
 
 		setIconImage(Utils.getImage("favicon_large.png").getImage());
@@ -90,7 +94,7 @@ public class AppFrame extends JFrame
 			}
 		});
 
-		pbar.setBounds(100, appHeight - 35, appWidth - 100, 35);
+		pbar.setBounds(0, appHeight - 35, appWidth - 325, 35);
 		pbar.setBackground(Settings.backgroundColor.darker());
 		pbar.setBorderPainted(false);
 		pbar.setStringPainted(true);
@@ -102,6 +106,27 @@ public class AppFrame extends JFrame
 	}
 
 	public static Control playButton = new Control("Launch");
+	public static JComboBox hardwareAccelerationComboBox = new JComboBox(HardwareAccelerationMode.values());
+	public static JLabel hardwareLabel = new JLabel();
+
+	private void addHardwareCombo()
+	{
+		hardwareLabel.setLabelFor(hardwareAccelerationComboBox);
+		hardwareLabel.setText("Hardware Acceleration: ");
+		hardwareLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		hardwareLabel.setForeground(Color.WHITE);
+		Utils.setFont(hardwareLabel, "OpenSans-Regular.ttf", 10);
+		hardwareLabel.setBounds(appWidth - 325, appHeight - 35, 125, 35);
+		hardwareAccelerationComboBox.setBounds(appWidth - 200, appHeight - 35, 100, 35);
+		hardwareAccelerationComboBox.setBackground(Settings.backgroundColor.brighter());
+		hardwareAccelerationComboBox.setSelectedItem(HardwareAccelerationMode.OFF);
+		Utils.setFont(hardwareAccelerationComboBox, "OpenSans-Regular.ttf", 10);
+		hardwareAccelerationComboBox.setForeground(Color.WHITE);
+		hardwareAccelerationComboBox.addItemListener(new DropDownListener());
+		add(hardwareLabel);
+		add(hardwareAccelerationComboBox);
+
+	}
 
 	private void addPlayButton()
 	{
@@ -109,7 +134,7 @@ public class AppFrame extends JFrame
 		playButton.setBackground(Settings.primaryColor);
 		playButton.addActionListener(new ButtonListener());
 		// (appWidth / 2) - (167 / 2)
-		playButton.setBounds(0, appHeight - 35, 100, 35);
+		playButton.setBounds(appWidth - 100, appHeight - 35, 100, 35);
 		Utils.setFont(playButton, "OpenSans-Regular.ttf", 16);
 		add(playButton);
 	}
