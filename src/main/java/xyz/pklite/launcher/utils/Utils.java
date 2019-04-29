@@ -44,7 +44,12 @@ public class Utils
 		try
 		{
 			HardwareAccelerationMode selectedMode = (HardwareAccelerationMode) AppFrame.hardwareAccelerationComboBox.getSelectedItem();
-			ProcessBuilder pb = new ProcessBuilder(selectedMode.toParams());
+			List<String> params = selectedMode.toParams();
+			if(AppFrame.pmode.isSelected())
+			{
+				params.add("--penguin");
+			}
+			ProcessBuilder pb = new ProcessBuilder(params);
 			pb.directory(new File(System.getProperty("java.home") + File.separator + "bin"));
 			final Process proc = pb.start();
 			System.setOut(new PrintStream(proc.getOutputStream()));
