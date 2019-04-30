@@ -9,8 +9,8 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>8</source>
-          <target>8</target>
+          <source>9</source>
+          <target>9</target>
         </configuration>
       </plugin>
       <plugin>
@@ -18,7 +18,7 @@
         <version>3.2.1</version>
         <executions>
           <execution>
-            <phase>install</phase>
+            <phase>package</phase>
             <goals>
               <goal>shade</goal>
             </goals>
@@ -46,7 +46,7 @@
             <configuration>
               <headerType>gui</headerType>
               <outfile>target/PKLite.exe</outfile>
-              <jar>target/${project.artifactId}-${project.version}-SHADED.jar</jar>
+              <jar>target/${project.artifactId}-${project.version}.jar</jar>
               <dontWrapJar>false</dontWrapJar>
               <errTitle>Error in launch4j plugin</errTitle>
               <classPath>

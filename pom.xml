@@ -17,26 +17,27 @@
 					<target>9</target>
 				</configuration>
 			</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>3.2.1</version>
-						<executions>
-							<execution>
-								<phase>install</phase>
-								<goals>
-									<goal>shade</goal>
-								</goals>
-								<configuration>
-									<transformers>
-										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-											<mainClass>xyz.pklite.launcher.Launcher</mainClass>
-										</transformer>
-									</transformers>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+										implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>xyz.pklite.launcher.Launcher</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>com.akathist.maven.plugins.launch4j</groupId>
 				<artifactId>launch4j-maven-plugin</artifactId>
@@ -51,7 +52,7 @@
 						<configuration>
 							<headerType>gui</headerType>
 							<outfile>target/PKLite.exe</outfile>
-							<jar>target/${project.artifactId}-${project.version}-SHADED.jar</jar>
+							<jar>target/${project.artifactId}-${project.version}.jar</jar>
 							<!-- if <dontWrapJar>true</dontWrapJar> change to this conf <jar>${project.artifactId}-${project.version}.jar</jar> -->
 							<dontWrapJar>false</dontWrapJar>
 							<errTitle>Error in launch4j plugin</errTitle>
@@ -69,7 +70,7 @@
 								<fileVersion>1.0.0.0</fileVersion>
 								<txtFileVersion>1.0.0.0</txtFileVersion>
 								<fileDescription>PKLite Launcher</fileDescription>
-								<copyright>Copyright (c) 2019 </copyright>
+								<copyright>Copyright (c) 2019</copyright>
 								<companyName>PKLite</companyName>
 								<productVersion>3.0.0.0</productVersion>
 								<txtProductVersion>${project.version}</txtProductVersion>
