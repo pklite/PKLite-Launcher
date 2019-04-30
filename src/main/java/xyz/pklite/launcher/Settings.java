@@ -23,7 +23,7 @@ public class Settings
 	public static final String SAVE_DIR = System.getProperty("user.home") + File.separator + ".pklite" + File.separator;
 	public static final String HOMEPAGE_URL = "pklite.xyz";
 	public static final String VERSION_URL = "https://www.pklite.xyz/releases/launcher";
-	public static final String RELEASES_URL = "https://github.com/pklite/PKLite-Launcher/releases";
+	public static final String RELEASES_URL = "https://pklite.xyz/downloads/";
 	public static final String LAUNCHER_VERSION = "1.0.3";
 	public static final int NEWS_LIMIT = 4;
 
