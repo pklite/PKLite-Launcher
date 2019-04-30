@@ -12,6 +12,7 @@ package xyz.pklite.launcher;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import java.awt.Color;
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import javax.swing.JOptionPane;
@@ -27,7 +28,7 @@ public class Launcher
 	public static void main(String[] main)
 	{
 
-
+		new File(Settings.SAVE_DIR).mkdirs();
 		UIManager.put("Button.select", new Color(1.0f, 1.0f, 1.0f, 0.05f));
 		System.setProperty("awt.useSystemAAFontSettings", "on");
 		System.setProperty("swing.aatext", "true");

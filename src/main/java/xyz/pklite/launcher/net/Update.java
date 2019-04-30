@@ -37,6 +37,7 @@ public class Update
 		{
 			localHash = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
 			remoteHash = Unirest.get(Settings.HASH_URL).asString().getBody();
+			System.err.println("local hash: " + localHash + " remote hash: " + remoteHash);
 			if (!localHash.equalsIgnoreCase(remoteHash))
 			{
 				return UpdateStatus.UPDATE_NEEDED;
